@@ -1,135 +1,51 @@
-# TextClean
+# TextClean — Text preprocessing pipeline — chainable cleaning steps: HTML, URLs, stopwords, stemming, normalization
 
-[![CI](https://github.com/officethree/TextClean/actions/workflows/ci.yml/badge.svg)](https://github.com/officethree/TextClean/actions/workflows/ci.yml)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+Text preprocessing pipeline — chainable cleaning steps: HTML, URLs, stopwords, stemming, normalization. TextClean gives you a focused, inspectable implementation of that idea.
 
-A Python library for cleaning and normalizing text data with composable pipeline steps.
+## Why TextClean
 
-## Architecture
+TextClean exists to make this workflow practical. Text preprocessing pipeline — chainable cleaning steps: html, urls, stopwords, stemming, normalization. It favours a small, inspectable surface over sprawling configuration.
 
-```mermaid
-graph LR
-    A[Raw Text] --> B[TextClean Pipeline]
-    B --> C1[strip_html]
-    C1 --> C2[remove_urls]
-    C2 --> C3[lowercase]
-    C3 --> C4[remove_punctuation]
-    C4 --> C5[remove_stopwords]
-    C5 --> C6[stem]
-    C6 --> C7[normalize_whitespace]
-    C7 --> D[Clean Text]
-```
+## Features
 
-```mermaid
-classDiagram
-    class TextClean {
-        -List steps
-        +lowercase() Self
-        +strip_html() Self
-        +remove_urls() Self
-        +remove_emails() Self
-        +remove_numbers() Self
-        +remove_punctuation() Self
-        +remove_stopwords() Self
-        +normalize_whitespace() Self
-        +remove_accents() Self
-        +stem() Self
-        +add_step(fn) Self
-        +process(text) str
-        +clean(text) str
-        +process_batch(texts) list
-        +from_config(cfg) TextClean
-    }
-    class PipelineConfig {
-        +bool lowercase
-        +bool strip_html
-        +bool remove_urls
-        +bool remove_emails
-        +bool remove_numbers
-        +bool remove_punctuation
-        +bool remove_stopwords
-        +bool normalize_whitespace
-        +bool remove_accents
-        +bool stem
-    }
-    TextClean ..> PipelineConfig : from_config()
-```
+- `TextClean` — exported from `src/textclean/core.py`
+- Included test suite
+- Dedicated documentation folder
 
-## Quickstart
+## Tech Stack
 
-### Installation
+- **Runtime:** Python
+- **Tooling:** Pydantic
+
+## How It Works
+
+The codebase is organised into `docs/`, `src/`, `tests/`. The primary entry points are `src/textclean/core.py`, `src/textclean/__init__.py`. `src/textclean/core.py` exposes `TextClean` — the core types that drive the behaviour.
+
+## Getting Started
 
 ```bash
 pip install -e .
 ```
 
-### Usage
+## Usage
 
 ```python
-from textclean import TextClean
+from textclean.core import TextClean
 
-# Build a pipeline with chained steps
-cleaner = (
-    TextClean()
-    .lowercase()
-    .strip_html()
-    .remove_urls()
-    .remove_punctuation()
-    .remove_stopwords()
-    .normalize_whitespace()
-)
-
-text = '<p>Visit https://example.com for MORE info!</p>'
-print(cleaner.process(text))
-# => "visit info"
-
-# Process multiple texts at once
-results = cleaner.process_batch(["<b>Hello</b> World!", "Testing 123..."])
+instance = TextClean()
+# See the source for the full API
 ```
 
-### Config-driven pipeline
+## Project Structure
 
-```python
-from textclean import TextClean, PipelineConfig
-
-config = PipelineConfig(
-    lowercase=True,
-    strip_html=True,
-    remove_urls=True,
-    normalize_whitespace=True,
-)
-cleaner = TextClean.from_config(config)
-print(cleaner.process("<h1>Hello</h1>"))
-# => "hello"
 ```
-
-### Custom steps
-
-```python
-from textclean import TextClean
-
-cleaner = (
-    TextClean()
-    .lowercase()
-    .add_step(lambda t: t.replace("foo", "bar"), name="foo_to_bar")
-    .normalize_whitespace()
-)
+TextClean/
+├── .env.example
+├── CONTRIBUTING.md
+├── Makefile
+├── README.md
+├── docs/
+├── pyproject.toml
+├── src/
+├── tests/
 ```
-
-## Development
-
-```bash
-make dev      # install with dev dependencies
-make test     # run tests
-make lint     # lint with ruff
-make fmt      # format with ruff
-```
-
-## Inspiration
-
-Inspired by NLP preprocessing and text cleaning trends.
-
----
-
-Built by [Officethree Technologies](https://officethree.com) | Made with love and AI
