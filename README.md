@@ -1,6 +1,6 @@
 # TextClean — Text preprocessing pipeline — chainable cleaning steps: HTML, URLs, stopwords, stemming, normalization
 
-Text preprocessing pipeline — chainable cleaning steps: HTML, URLs, stopwords, stemming, normalization. TextClean gives you a focused, inspectable implementation of that idea.
+Text preprocessing pipeline — chainable cleaning steps: HTML, URLs, stopwords, stemming, normalization.
 
 ## Why TextClean
 
